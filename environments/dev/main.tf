@@ -23,14 +23,13 @@ module "vpc" {
   availability_zones   = ["us-east-1a","us-east-1b"] 
 }
 
-module "eks" {
-  source          = "../../modules/eks"
-  cluster_name    = "dev_cluster"
-  cluster_version = "1.29"
-  subnet_ids      = module.vpc.private_subnet_ids
-  vpc_id          = module.vpc.vpc_id
-
-  tags = {
-    environment = "dev"
-  }
+module "k8s-cluster" {
+  source    = "../../modules/k8s-cluster"
+  namespace = "dev"
 }
+
+  provider "kubernetes" {
+    config_path = "~/.kube/config"
+}
+
+
